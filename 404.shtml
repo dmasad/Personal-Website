@@ -1,0 +1,33 @@
+<html>
+
+<head>
+<link rel="stylesheet" type="text/css" href="test.css" />
+<title>David Masad </title>
+</head>
+
+<body>
+
+<div class="container">
+  <div class="sidebar1">
+    <ul class="nav">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="research.html">Research</a></li>
+      <li><a href="resume.html">R&eacute;sum&eacute;</a></li>
+    </ul>
+    <h4>Contact</h4>
+    <p><a href="mailto:david.masad@gmail.com">Email</a></p>
+    <p><a href="http://www.facebook.com/david.masad">Facebook</a></p>
+  <!-- end .sidebar1 --></div>
+  <div class="content">
+    <h1>Error 404</h1>
+    <!-- TemplateBeginEditable name="hed" -->
+    
+    <!-- TemplateEndEditable --><br />
+	<!-- TemplateBeginEditable name="content" -->
+    <h4><p>Oops, there's no such page right now. The links to the left should help you out.
+    </h4>
+    <!-- TemplateEndEditable -->
+    <!-- end .content --></div>
+  <!-- end .container --></div>
+</body>
+</html>

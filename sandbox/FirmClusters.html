@@ -1,0 +1,224 @@
+<html>
+<head>
+<script type="text/javascript"src="http://d3js.org/d3.v2.js"></script>
+<style type="text/css">
+/*  Styling for D3 Visualization  */
+rect.frame {
+  fill: #fff;
+  fill-opacity: .7;
+  stroke: #aaa;
+}
+
+rect.extent {
+  fill: #000;
+  fill-opacity: .125;
+  stroke: #fff;
+}
+
+rect.frame {
+  fill: #fff;
+  fill-opacity: .7;
+  stroke: #aaa;
+}
+
+.selected {
+    fill: #080;
+    fill-opacity: 0.6;
+}
+
+.unselected {
+    fill: #ccc;
+    fill-opacity: 0.5;
+}
+
+.highighted {
+    fill: #080;
+    fill-opacity: 0.8;
+}
+
+/* Styling for text*/
+h2, h3 {
+    text-align: justify;
+    padding-left: 50px;
+    width: 900px;
+    line-height: 70%;
+}
+
+.padded_text {
+    text-align: justify;
+    padding-left: 50px;
+    width: 900px;
+}
+
+
+</style>
+<script type="text/javascript">
+    
+/* Draft version of data:
+data = {years: [1995, 1996],
+        data: [
+            {name: 'a', 1995: {x: 25, y:37}, 1996: {x: 55, y: 79}},
+            {name: 'b', 1995: {x: 36, y:48}, 1996: {x: 67, y: 91}},
+            {name: 'c', 1995: {x: 30, y:42}, 1996: {x: 60, y: 85}}
+        ]
+}; */
+
+function start() {
+    // Load the JSON and pass the data to the drawAll function.
+    d3.json("CompanyClusters.json", function(d) {drawAll(d);});
+}
+
+function drawAll(data)
+{
+    var size = 200, padding = 20;
+    var width = 900, height = 900;
+    
+    // Root Panel:
+    var svg = d3.select("#chart").append("svg:svg")
+        .attr("width", width)
+        .attr("height", height)
+        .append("svg:g")
+        .attr("transform", "translate(100,20)");
+
+
+    var years = data.years;
+    var firms = data.data;
+    
+    
+    // Temp thing to store box offsets by year:
+    //var offsets = {2009: {x: 0, y: 0}, 2010: {x: 1, y: 0}};
+    
+    var offsets = findOffsets(years, size, width); 
+
+    //Construct Scales
+    var xScale = {}, yScale = {}
+    for (var y in years) {
+        year = years[y]
+        domain_x = [d3.min(firms, function(d){return d[year].x;}), d3.max(firms, function(d){return d[year].x;})]
+        domain_y = [d3.min(firms, function(d){return d[year].y;}), d3.max(firms, function(d){return d[year].y;})]
+        range = [padding/2, size-padding/2];
+
+        xScale[year] = d3.scale.linear().domain(domain_x)
+            .range(range);
+        yScale[year] = d3.scale.linear().domain(domain_y)
+            .range(range.slice().reverse());
+    }
+
+    // Brush:
+    brush = d3.svg.brush()
+        .on("brushstart", brushstart)
+        .on("brush", brush)
+        .on("brushend", brushend)
+
+    // Draw Cells:
+    var cells = svg.selectAll("cell")
+        .data(years)
+        .enter().insert("g")
+        .attr("transform", function(d){return "translate(" + size*offsets[d].x + "," + size*offsets[d].y + ")" })
+        .each(plot);
+    
+    // Add labels:
+    cells.append("text")
+        .attr("x", size/2 - padding)
+        .attr("y", padding/3)
+        .text(function(d) {return d;});
+    
+    function plot(p)
+    {
+        // Draw the box and specific points for each year
+        var cell = d3.select(this);
+        // Draw frame:
+        cell.append("svg:rect")
+            .attr("class", "frame")
+            .attr("x", padding/2)
+            .attr("y", padding/2)
+            .attr("width", size-padding)
+            .attr("height", size-padding)
+            //.style("fill", "grey");
+        
+        // Draw points:
+        cell.selectAll("circle")
+            .data(firms).enter()
+            .append("svg:circle")
+            .attr("cx", function(d){return xScale[p](d[p].x);})
+            .attr("cy", function(d){return yScale[p](d[p].y);})
+            .attr("r", 2)
+            .attr("class", 'selected')
+            //.attr("class", function(d){return d.name ? 'selected' : null})
+            //.style("fill", "steelblue")
+            //.on("mouseover", function(d){d.name = null;})
+            //.on("mouseout", function(){d3.select(this).style("fill", "steelblue")});
+        
+        // Hide points where x==y==0 (missing data):
+        cell.selectAll("circle").filter(function(d){return d[p].x==0 && d[p].y==0;})
+            .style("fill", "white");
+
+        cell.call(brush.x(xScale[p]).y(yScale[p]));
+    }
+    // Brush functions:
+    function brushstart(p)
+    {
+        // p is the datum attached to the node
+        // in this case, the year.
+        if (brush.data !== p) {
+            cells.call(brush.clear());
+            brush.x(xScale[p]).y(yScale[p]).data = p;
+        }
+    }
+
+    function brush(p)
+    {
+        //console.log(p);
+        var e = brush.extent();
+        svg.selectAll("circle").attr("class", function(d) {
+            return e[0][0] <= d[p].x && d[p].x <= e[1][0]
+            && e[0][1] <= d[p].y && d[p].y <= e[1][1]&& (d[p].y!==0 && d[p].x!==0)
+            ? "highighted" : "unselected";
+        });
+    }
+
+    function brushend()
+    {
+        //if(brush.empty()) svg.selectAll("circle").style("fill", "steelblue");
+        if(brush.empty()) svg.selectAll("circle").attr("class", "selected");
+    }
+}
+
+function findOffsets(itemList, boxWidth, totalWidth) {
+    // Find the offsets for each element in itemList. Go left, then down.
+ 
+    var itemsPerRow = Math.floor(totalWidth / boxWidth);
+    var offsets = {}
+    for (i in itemList)
+    {
+        offsets[itemList[i]] = {x: i % itemsPerRow, y: Math.floor(i / itemsPerRow)};
+    }
+    return offsets
+}
+
+</script>
+<title>SEC Document Clustering - David Masad and Sanjay Nayar, CSS 739</title>
+</head>
+
+<body onload=start()>
+    <h2>SEC Document Clustering<//h2>
+    <h3>David Masad & Sanjay Nayar</h3>
+    <div class="padded_text">Each dot below represents a corporation. The closer two dots are in a given year, the more similar the text of the <i>Management Discussion and Analysis</i> sections in their SEC 10-K filings for that year. Click-drag to select companies in one year, and the same companies will be highlighted in all other years.</div>
+    
+    <div id='chart'></div>
+
+    <div class='padded_text'>
+    <h3><b>Text distance between firms' 10-K filings, 1995-2010</b></h3>
+    <h4>Background</h4> 
+    <p>Every American public corporation is required to file a 10-K report annually with the Securities and Exchange Commission. The structure of these reports is mandated by statute, and includes <i>Item 7: Management's Discussion and Analysis</i> describing the firms' present, past and future operations and performance.</p>
+    <p><a href="http://www.cs.cmu.edu/~nasmith/papers/kogan+levin+routledge+sagi+smith.naacl09.pdf">Kogan et al.</a> have demonstrated that language used in Item 7 is salient to company operations, and can be used to predict the volatility of its stock. We build on this, and hypothesize that the similarity of Item 7 text between firms indicates an underlying connection within the market.</p>
+    
+    <h4><b>Methodology</b></h4> 
+    <p>We analyze 10-K filings for the firms of the <a href="http://www.standardandpoors.com/indices/sp-composite-1500/en/us/?indexId=spusa-15--usduf--p-us----">S&P 1,500</a>, a combination of large-, mid- and small-cap companies providing a good sample of the entire market. Electronic filings from 1993 to the present are available online from the SEC's <a href="http://www.sec.gov/edgar.shtml">EDGAR</a> system. We downloaded the files using <a href="http://aws.amazon.com/ec2/">Amazon EC2</a> instances and stored them on <a href="http://aws.amazon.com/s3/">Amazon S3</a>. We parsed the files in parallel using Python code running on <a href="http://www.picloud.com/">PiCloud</a>, and analyzed the resulting text using a mixture of <a href="http://mahout.apache.org/">Apache Mahout</a> running locally and on <a href="http://aws.amazon.com/elasticmapreduce/">Amazon EMR</a>, and custom Python code on PiCloud. This visualization contains the subset of firms filing 10-Ks, excluding 10-K/A and other variant forms.</p>
+
+    <p>Our analysis treated the text as a bag of words, looking at unigrams and bigrams. Document distance was computed using <a href="http://en.wikipedia.org/wiki/Jaccard_index">Jaccard similarity</a>. The visualization above was created via dimensionality reduction of the distance matrix for each year. Points are placed on two arbitrary dimensions, on per company, such that the euclidian distance between any two points approximates the distance between the companies' documents. The data was processed in Python and R, and visualized using <a href="http://d3js.org/">D3.js</a>.</p>
+    <h4>Discussion</h4>
+    <p>We note that the 'U' shaped projection emerges as the number of firms in the data grows. This indicates a robust overall structure, particularly since the shape is consistent despite individual firms' changing positions relative to one another. We also note that clusters of firms within a specific year's projection tend to appear in similar positions in years immediately preceding or following, and to grow apart in further years. This strongly suggests that firm position is <b>not</b> random, since otherwise we would not see cluster consistency between years. However, the fact that firm clusters are not constant suggests that the clustering reflects specific firm and market conditions, rather than inherent similarity in sector or other largely-fixed attribute.</p> 
+    </div>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript"> 
+    function loadData() {
+        var request = new XMLHttpRequest();
+        request.overrideMimeType("application/json");
+        request.open('GET', 'test.json', true);
+        request.onreadystatechange = function() {
+        if(request.readyState == 4) {
+            doStuff(request.responseText);}
+        };
+        request.send(null);
+    }
+    
+    function doStuff(rawdata) {
+        // Parse a JSON document and Alert the first value.
+        //alert(rawdata);
+        //var myObj = eval('('+rawdata+')');
+        var myObj = JSON.parse(rawdata);
+        alert (myObj.Test[0]);
+    }
+</script>
+</head>
+
+<body onload="loadData()">
+</body>
+</html>
