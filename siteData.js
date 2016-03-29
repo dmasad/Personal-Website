@@ -2,9 +2,9 @@ siteData = {
 
 Name: "David Masad",
 About: [
-		"I am a Ph.D. student at George Mason University's <a href=''>Department of Computational Social Science</a>.", 
-		"I'm interested in applying rigorous quantitative techniques to complex social science questions. I use computational models, network analysis, statistics, and natural language processing to facilitate rapid analysis, with an eye towards policy.",
-		"My research interests tend to focus on international relations, with an emphasis on national security.",
+		"I am a Ph.D. candidate at George Mason University's <a href='http://css.gmu.edu/'>Computational Social Science</a> program.", 
+		"I'm interested in applying rigorous quantitative techniques to complex social science questions. I use computational models, network analysis, statistics, and visualization to facilitate rapid analysis, with an eye towards policy.",
+		"My dissertation research involves developing agent-based models of international conflict and comparatively tested their explanatory and predictive power using event data.",
 		"Outside of academia I'm into cooking, road-tripping, rock climbing, and reading and writing fiction."
 	],
 
@@ -14,7 +14,8 @@ Structure is {text, url}
 */
 	{text: "About", url: 'index.html'},
 	{text: "Research", url: 'Research.html'},
-	{text: 'R&eacute;sum&eacute;', url: "resume.html"}
+	{text: 'R&eacute;sum&eacute;', url: "resume.html"},
+	{text: 'Blog', url: '/blog'}
 
 ],
 
@@ -25,7 +26,17 @@ Peer-Reviewed or refereed publications
 Project entry structure is:
 {name, authors, date, source, image, description, links: [...]}
 */
-
+	{
+		name: "Mesa: An Agent-Based Modeling Framework",
+		authors: "Jacqueline Kazil and David Masad",
+		source: '<a href="http://conference.scipy.org/proceedings/scipy2015/jacqueline_kazil.html">SciPy 2015</a>',
+		date: "July, 2015",
+		image: 'MesaLogo_sm.png',
+		description: 'We are developing Mesa, an agent-based modeling framework in Python that integrates with the scientific Python ecosystem and features modular components and a browser-based visualization.',
+		links: [
+			{text: "Project GitHub Repository", url: "https://github.com/projectmesa/mesa"}
+		]
+	},
 	{
 		name: "International Relations: State-Driven and Citizen-Driven Networks",
 		authors: "Andrew Crooks, David Masad, Arie Croitoru, Amy Cotnoir, Anthony Stefanidis, Jacek Radzikowski",
@@ -77,17 +88,38 @@ OtherProjects: [
 	},
 
 	{
-		name: 'Introduction to GDELT',
-		link: 'https://github.com/dmasad/GDELT_Intro',
-		image: 'GDELT.png',
-		description: 'Quick introductions to working with the  <a href="http://gdelt.utdallas.edu/">Global Data on Events, Location and Tone</a> dataset, which contains 200+ million geolocated political events from 1979 to 2012. The <a href="http://nbviewer.ipython.org/urls/raw.github.com/dmasad/GDELT_Intro/master/Getting_Started_with_GDELT.ipynb">first tutorial</a> covers event counts, and the <a href="http://nbviewer.ipython.org/urls/raw.github.com/dmasad/GDELT_Intro/master/GDELT_Mapping.ipynb">second tutorial</a> covers basic mapping.<br />I also have a <a href="http://nbviewer.ipython.org/urls/raw.github.com/dmasad/GDELT_Intro/master/GKG%2520Tutorial.ipynb">tutorial</a> on working with the new <a href="http://gdeltblog.wordpress.com/2013/10/27/announcing-the-debut-of-the-gdelt-global-knowledge-graph/">Global Knowledge Graph</a>, the GDELT companion dataset of named entities and themes.'
+		name: 'Intro to Phoenix Data',
+		link: 'https://github.com/dmasad/PhoenixData/blob/master/Intro%20to%20Phoenix.ipynb',
+		image: 'Phoenix.png',
+		description: 'Quick tutorial on analyzing Phoenix event data in Python.'
 	},
 
 	{
-		name: 'SEC Document Clustering',
-		link: 'http://www.davidmasad.com/sandbox/FirmClusters.html',
-		image: 'SECDocs.png',
-		description: "An interactive visualization showing clusters of S&P 1,500 corporations from 1995-2010, based on the textual distance of their SEC filings. <p>The data is derived from an analysis of ~20,000 SEC 10-K filings using big data tools, including <a href='http://aws.amazon.com/'>Amazon Web Services</a>, <a href='http://mahout.apache.org/''>Apache Mahout</a>, and <a href='http://www.picloud.com/'>PiCloud</a>. Presented as part of a final project for CSS 739, Spring 2012 at George Mason University's <a href='http://css.gmu.edu/'>Department of Computational Social Science</a>."
+		name: 'Intro to ICEWS',
+		link: 'https://gist.github.com/dmasad/f79ce5abfd4fb61d253b',
+		image: 'ICEWS.png',
+		description: 'Quick tutorial on analyzing ICEWS event data in Python.'
+	},
+
+	{
+		name: 'Introduction to GDELT',
+		link: 'https://github.com/dmasad/GDELT_Intro',
+		image: 'GDELT.png',
+		description: '(Outdated) Quick introductions to working with the  <a href="http://gdelt.utdallas.edu/">Global Data on Events, Location and Tone</a> dataset, which contains 200+ million geolocated political events from 1979 to 2012. The <a href="http://nbviewer.ipython.org/urls/raw.github.com/dmasad/GDELT_Intro/master/Getting_Started_with_GDELT.ipynb">first tutorial</a> covers event counts, and the <a href="http://nbviewer.ipython.org/urls/raw.github.com/dmasad/GDELT_Intro/master/GDELT_Mapping.ipynb">second tutorial</a> covers basic mapping.<br />I also have a <a href="http://nbviewer.ipython.org/urls/raw.github.com/dmasad/GDELT_Intro/master/GKG%2520Tutorial.ipynb">tutorial</a> on working with the new <a href="http://gdeltblog.wordpress.com/2013/10/27/announcing-the-debut-of-the-gdelt-global-knowledge-graph/">Global Knowledge Graph</a>, the GDELT companion dataset of named entities and themes.'
+	},
+
+	{
+		name: 'Introduction to GDELT',
+		link: 'https://github.com/dmasad/GDELT_Intro',
+		image: 'GDELT.png',
+		description: '(Outdated) Quick introductions to working with the  <a href="http://gdelt.utdallas.edu/">Global Data on Events, Location and Tone</a> dataset, which contains 200+ million geolocated political events from 1979 to 2012. The <a href="http://nbviewer.ipython.org/urls/raw.github.com/dmasad/GDELT_Intro/master/Getting_Started_with_GDELT.ipynb">first tutorial</a> covers event counts, and the <a href="http://nbviewer.ipython.org/urls/raw.github.com/dmasad/GDELT_Intro/master/GDELT_Mapping.ipynb">second tutorial</a> covers basic mapping.<br />I also have a <a href="http://nbviewer.ipython.org/urls/raw.github.com/dmasad/GDELT_Intro/master/GKG%2520Tutorial.ipynb">tutorial</a> on working with the new <a href="http://gdeltblog.wordpress.com/2013/10/27/announcing-the-debut-of-the-gdelt-global-knowledge-graph/">Global Knowledge Graph</a>, the GDELT companion dataset of named entities and themes.'
+	},
+
+	{
+		name: "Grey's Anatomy ERGM in Python",
+		link: 'https://gist.github.com/dmasad/78cb940de103edbee699',
+		image: 'GreyAnatomy.png',
+		description: "Analyzing the relationships on the TV series Grey's Anatomy with Exponential Random Graph Models and PyMC."
 	},
 
 	{
@@ -143,11 +175,23 @@ Employment: [
 		name: "Department of Computational Social Science",
 		subtitle: "Graduate Research Assistant",
 		location: "George Mason University, Fairfax, VA",
-		timeframe: "2012 - Present",
+		timeframe: "2012 - 2015",
 		descriptions: [
 			"Collaborate with faculty to develop agent-based models, acquire and analyze data, and write results for publication.",
 			"Analyzed large-scale Twitter data relating to Syrian conflict, using novel country- level aggregation in conjunction with geopolitical network analysis.",
 			"Presented methodologies and results to special interest course given to NGA analysts."]
+
+	},
+	{
+		name: "The MITRE Corporation",
+		subtitle: "Artificial Intelligence Engineer Graduate Intern",
+		location: "Arlington, VA",
+		timeframe: "Summer 2014",
+		descriptions: [
+			"Developed modeling approach to assessing and improving large-scale judiciary systems.",
+			"Collaborated with external subject-matter experts to operationalize qualitative insights and experience into agent-based models.",
+			"Developed multi-user simulation for validation of an agent-based model, and conducted initial experiments with graduate student volunteers.",
+			]
 
 	},
 
